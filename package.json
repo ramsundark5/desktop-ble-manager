@@ -1,0 +1,13 @@
+{
+  "name": "ble-manager",
+  "version": "0.0.1",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+  },
+  "dependencies": {
+    "noble": "1.6.0",
+    "express": "^4.14.0",
+    "lru-cache": "4.0.1"
+  }
+}
