@@ -24,7 +24,7 @@ function init(){
 function getCurrentCharacteristicValue(req, res){
     var username = req.params.username;
     var passcode = cache.get(username);
-    return res.json({ passcode: passcode })
+    return res.json({ username: username, passcode: passcode })
 }
 
 noble.on('stateChange', function(state) {

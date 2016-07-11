@@ -1,0 +1,37 @@
+<html>
+<head>
+    <link href="login.css" rel="stylesheet"/>
+</head>
+
+<body>
+    <div class="login-page">
+        <div class="form">
+            <form class="login-form">
+                <input id="userid" type="text" placeholder="username"/>
+                <input type="password" placeholder="password"/>
+                <input id="passcode" type="text" placeholder="OTP passcode"/>
+                <button>login</button>
+                <p class="message">Not registered? <a href="#">Create an account</a></p>
+            </form>
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        getOTPCode();
+    });
+
+    function getOTPCode() {
+        $.get('read/John', function( data ) {
+            var uname = $('#userid').val();
+            if(uname === data.username){
+                $('#passcode').val(data.passcode);
+            }
+        });
+        setTimeout(getOTPCode, 1000);
+    }
+
+</script>
+</html>
