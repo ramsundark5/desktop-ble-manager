@@ -2,10 +2,11 @@ var express = require('express');
 var app = express();
 var noble = require('noble');
 var LRU = require("lru-cache");
+var speakeasy = require('speakeasy');
 var lruOptions = { max: 10, maxAge: 1000 * 60 * 60 };
 var cache = LRU(lruOptions);
-var SERVICE_UUID = "7e60";
-var CHARACTERISTIC_UUID = "b71e";
+var SERVICE_UUID = "7E61";
+var CHARACTERISTIC_UUID = "c71e";
 
 init();
 
@@ -14,7 +15,10 @@ function init(){
         var port = server.address().port;
         console.log('server listening at port ' + port);
     });
+    app.use(express.static('public'));
     app.get('/read/:username', getCurrentCharacteristicValue);
+    var secret = speakeasy.generateSecret({length: 20});
+    console.log(secret.base32);
 }
 
 function getCurrentCharacteristicValue(req, res){
@@ -39,9 +43,7 @@ noble.on('discover', function(peripheral) {
           if(connectError){
               console.log('unable to connect to peripheral '+connectError);
           }
-          peripheral.discoverSomeServicesAndCharacteristics(
-              [SERVICE_UUID],
-              [CHARACTERISTIC_UUID],
+          peripheral.discoverAllServicesAndCharacteristics(
               discoverServicesAndCharacteristics
           );
       });
@@ -72,7 +74,7 @@ function onCharacteristicUpdate(value, isNotification){
     try {
         var updatedValue = JSON.parse(value.toString());
         if(updatedValue){
-            cache.set(updatedValue.username, updatedValue.password);
+            cache.set(updatedValue.username, updatedValue.passcode);
         }
     } catch (e) {
         console.log('error updating characteristic value '+ e);
